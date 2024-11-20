@@ -59,6 +59,8 @@ class VerificationCode extends StatefulWidget {
   /// padding inside boxes
   final EdgeInsets? padding;
 
+  final BorderRadius? borderRadius;
+
   const VerificationCode({
     Key? key,
     required this.onCompleted,
@@ -80,6 +82,7 @@ class VerificationCode extends StatefulWidget {
     this.digitsOnly = false,
     this.margin = EdgeInsets.zero,
     this.padding,
+    this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -145,12 +148,14 @@ class _VerificationCodeState extends State<VerificationCode> {
       fillColor: widget.fillColor,
       filled: widget.fillColor != null ? true : false,
       enabledBorder: UnderlineInputBorder(
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
         borderSide: BorderSide(
           color: widget.underlineUnfocusedColor ?? Colors.grey,
           width: widget.underlineWidth ?? 1,
         ),
       ),
       focusedBorder: UnderlineInputBorder(
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
         borderSide: BorderSide(
           color: widget.underlineColor ?? Theme.of(context).primaryColor,
           width: widget.underlineWidth ?? 1,
@@ -165,12 +170,14 @@ class _VerificationCodeState extends State<VerificationCode> {
       fillColor: widget.fillColor,
       filled: widget.fillColor != null ? true : false,
       enabledBorder: OutlineInputBorder(
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
         borderSide: BorderSide(
           color: widget.underlineUnfocusedColor ?? Colors.grey,
           width: widget.underlineWidth ?? 1,
         ),
       ),
       focusedBorder: OutlineInputBorder(
+        borderRadius: widget.borderRadius ?? BorderRadius.circular(10),
         borderSide: BorderSide(
           color: widget.underlineColor ?? Theme.of(context).primaryColor,
           width: widget.underlineWidth ?? 1,
@@ -181,20 +188,20 @@ class _VerificationCodeState extends State<VerificationCode> {
       errorMaxLines: 1,
     );
 
-    return RawKeyboardListener(
+    return KeyboardListener(
       focusNode: _listFocusNodeKeyListener[index],
-      onKey: (event) {
-        if (event.runtimeType == RawKeyUpEvent) {
-          if (event.data.logicalKey == LogicalKeyboardKey.backspace &&
+      onKeyEvent: (event) {
+        if (event.runtimeType == KeyUpEvent) {
+          if (event.logicalKey == LogicalKeyboardKey.backspace &&
               _listControllerText[index].text.isEmpty) {
             if (index > 0) {
               _listControllerText[index - 1].clear();
             }
             _prev(index);
           }
-          if (event.data.logicalKey == LogicalKeyboardKey.arrowLeft) {
+          if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
             _prev(index);
-          } else if (event.data.logicalKey == LogicalKeyboardKey.arrowRight) {
+          } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
             _next(index);
           }
         }
